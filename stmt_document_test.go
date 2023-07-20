@@ -20,15 +20,17 @@ func Test_Stmt_Select_Parse(t *testing.T) {
 		limit    int32
 	}{
 		{name: "basic", sql: `SELECT * FROM "table"`, numInput: 0, limit: 0, afterSql: `SELECT * FROM "table"`},
-		{name: "limit", sql: `SELECT * FROM "table" LIMIT 10`, numInput: 0, limit: 10, afterSql: `SELECT * FROM "table"`},
-		{name: "limit with space", sql: `SELECT * FROM "table" LIMIT  10`, numInput: 0, limit: 10, afterSql: `SELECT * FROM "table"`},
+		{name: "limit", sql: `SELECT * FROM "table" LIMIT 10`, numInput: 0, limit: 10, afterSql: `SELECT * FROM "table" `},
+		{name: "limit with space", sql: `SELECT * FROM "table" LIMIT  10`, numInput: 0, limit: 10, afterSql: `SELECT * FROM "table" `},
 		{name: "limit with space and new line", sql: `SELECT * FROM "table" LIMIT  10
-`, numInput: 0, limit: 10, afterSql: `SELECT * FROM "table"`},
+		`, numInput: 0, limit: 10, afterSql: `SELECT * FROM "table" 
+		`},
 		{name: "parameterized", sql: `SELECT * FROM "table" WHERE id=?`, numInput: 1, limit: 0, afterSql: `SELECT * FROM "table" WHERE id=?`},
 		{name: "parameterized with space", sql: `SELECT * FROM "table" WHERE id = ?`, numInput: 1, limit: 0, afterSql: `SELECT * FROM "table" WHERE id = ?`},
 		{name: "parameterized with space and new line", sql: `SELECT * FROM "table" WHERE id = ?
-`, numInput: 1, limit: 0, afterSql: `SELECT * FROM "table" WHERE id = ?
-`},
+		`, numInput: 1, limit: 0, afterSql: `SELECT * FROM "table" WHERE id = ?
+		`},
+		{name: "limit in middle of sql", sql: `SELECT * FROM "table" LIMIT 10 WHERE id=?`, numInput: 1, limit: 10, afterSql: `SELECT * FROM "table"  WHERE id=?`},
 	}
 
 	for _, testCase := range testData {

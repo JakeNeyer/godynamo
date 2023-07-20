@@ -12,7 +12,10 @@ import (
 var (
 	rePlaceholder = regexp.MustCompile(`(?m)\?\s*[\,\]\}\s]`)
 	reReturning   = regexp.MustCompile(`(?im)\s+RETURNING\s+((ALL\s+OLD)|(MODIFIED\s+OLD)|(ALL\s+NEW)|(MODIFIED\s+NEW))\s+\*\s*$`)
-	reLimit       = regexp.MustCompile(`(?im)\s+LIMIT\s+(\d+)\s*$`)
+
+	// Limit may be at the end of the query, or the not
+	// e.g "SELECT * FROM table LIMIT 10" or "SELECT * FROM table WHERE id = 1 LIMIT 10"
+	reLimit = regexp.MustCompile(`LIMIT\s+(\d+)`)
 )
 
 /*----------------------------------------------------------------------*/
@@ -33,10 +36,10 @@ func (s *StmtExecutable) parse() error {
 			return fmt.Errorf("error parsing LIMIT value: %s", err)
 		}
 		s.limit = int32(sLimit)
-	}
 
-	// Remove LIMIT keyword and value from query
-	s.query = reLimit.ReplaceAllString(s.query, "")
+		// Remove LIMIT keyword and value from query
+		s.query = reLimit.ReplaceAllString(s.query, "")
+	}
 
 	return nil
 }

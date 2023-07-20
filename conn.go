@@ -113,14 +113,13 @@ func (c *Conn) executeContext(ctx context.Context, stmt *Stmt, values []driver.N
 		}
 	}
 
-	fmt.Printf("\n\n\n QUERY: %s \n\n\n", stmt.query)
-	fmt.Printf("\n\n\n LIMIT: %d \n\n\n", stmt.limit)
-
 	input := &dynamodb.ExecuteStatementInput{
 		Statement:              &stmt.query,
 		ReturnConsumedCapacity: types.ReturnConsumedCapacityTotal,
 		Parameters:             params,
-		Limit:                  &stmt.limit,
+	}
+	if stmt.limit > 0 {
+		input.Limit = &stmt.limit
 	}
 	output, err := c.client.ExecuteStatement(c.ensureContext(ctx), input)
 	return func() *dynamodb.ExecuteStatementOutput {
