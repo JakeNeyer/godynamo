@@ -112,6 +112,10 @@ func (c *Conn) executeContext(ctx context.Context, stmt *Stmt, values []driver.N
 			return nil, fmt.Errorf("error marshalling parameter %d-th: %s", i+1, err)
 		}
 	}
+
+	fmt.Printf("\n\n\n QUERY: %s \n\n\n", stmt.query)
+	fmt.Printf("\n\n\n LIMIT: %d \n\n\n", stmt.limit)
+
 	input := &dynamodb.ExecuteStatementInput{
 		Statement:              &stmt.query,
 		ReturnConsumedCapacity: types.ReturnConsumedCapacityTotal,
