@@ -119,6 +119,9 @@ func (s *StmtSelect) Query(values []driver.Value) (driver.Rows, error) {
 //
 // @Available since v0.2.0
 func (s *StmtSelect) QueryContext(ctx context.Context, values []driver.NamedValue) (driver.Rows, error) {
+	fmt.Printf("\n\n\n CALLING QUERY CONTEXT (PROVIDER)\n\n\n")
+	fmt.Printf("\n\n Values (query context): %+v values\n\n", values)
+
 	outputFn, err := s.conn.executeContext(ctx, s.Stmt, values)
 	// TODO Query is not supported yet in tx mode
 	// if err == ErrInTx {
