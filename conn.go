@@ -113,6 +113,9 @@ func (c *Conn) executeContext(ctx context.Context, stmt *Stmt, values []driver.N
 		}
 	}
 
+	fmt.Printf("\n\n\n Values: %+v", values)
+	fmt.Printf("\n\n\n Params: %+v", params)
+
 	input := &dynamodb.ExecuteStatementInput{
 		Statement:              &stmt.query,
 		ReturnConsumedCapacity: types.ReturnConsumedCapacityTotal,
@@ -122,6 +125,8 @@ func (c *Conn) executeContext(ctx context.Context, stmt *Stmt, values []driver.N
 		input.Limit = &stmt.limit
 	}
 	output, err := c.client.ExecuteStatement(c.ensureContext(ctx), input)
+	fmt.Printf("\n\n\n err: %+v", err)
+	fmt.Printf("\n\n\n output: %+v", output)
 	return func() *dynamodb.ExecuteStatementOutput {
 		return output
 	}, err
