@@ -41,6 +41,8 @@ func (s *StmtExecutable) parse() error {
 		s.query = reLimit.ReplaceAllString(s.query, "")
 	}
 
+	fmt.Printf("\n\n\n Parse (provider) --- statement: %+v\n\n", s)
+
 	return nil
 }
 
