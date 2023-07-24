@@ -3,6 +3,7 @@ package godynamo
 
 import (
 	"database/sql/driver"
+	"fmt"
 	"reflect"
 	"strconv"
 
@@ -52,6 +53,7 @@ func IsAwsError(err error, awsErrCode string) bool {
 //
 // @Available since v0.2.0
 func ValuesToNamedValues(values []driver.Value) []driver.NamedValue {
+	fmt.Printf("\n\n\n Values to Named Values: %+v\n\n", values)
 	result := make([]driver.NamedValue, len(values))
 	for i, v := range values {
 		result[i] = driver.NamedValue{Name: "$" + strconv.Itoa(i+1), Ordinal: i, Value: v}
